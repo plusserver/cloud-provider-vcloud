@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: vcloud-cloud-controller-manager
+  namespace: kube-system
+  labels:
+    k8s-app: vcloud-cloud-controller-manager
+spec:
+  selector:
+    matchLabels:
+      k8s-app: vcloud-cloud-controller-manager
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        k8s-app: vcloud-cloud-controller-manager
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/controlplane: "true"
+      tolerations:
+        - key: "node-role.kubernetes.io/controlplane"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/etcd"
+          operator: "Equal"
+          value: "true"
+          effect: "NoExecute"
+      serviceAccountName: cloud-controller-manager
+      imagePullSecrets:
+        - name: plusserver
+      containers:
+        - name: vcloud-cloud-controller-manager
+          imagePullPolicy: Always
+          image: customer-cloud-docker-general.psmanaged.com/plusserver/vcloud-cloud-controller-manager:latest
+          args:
+            - /bin/vcloud-cloud-controller-manager
+            - --v=4
+            - --cloud-config=$(CLOUD_CONFIG)
+            - --cloud-provider=vCloud
+            - --leader-elect=true
+            - --use-service-account-credentials=true
+          volumeMounts:
+            - mountPath: /etc/kubernetes/pki
+              name: k8s-certs
+              readOnly: true
+            - mountPath: /etc/config
+              name: cloud-config-volume
+              readOnly: true
+          resources:
+            requests:
+              cpu: 200m
+          env:
+            - name: CLOUD_CONFIG
+              value: /etc/config/cloud-config.yml
+            - name: VCLOUD_VDC_NETWORK_NAME
+              value:
+            - name: VCLOUD_VDC_NETWORK_IPNET
+              value:
+      hostNetwork: true
+      volumes:
+        - hostPath:
+            path: /etc/kubernetes/pki
+            type: DirectoryOrCreate
+          name: k8s-certs
+        - name: cloud-config-volume
+          secret:
+            secretName: cloud-config
