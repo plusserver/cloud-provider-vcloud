@@ -103,7 +103,7 @@ func (loadBalancer *LB) createMember(port corev1.ServicePort, service *corev1.Se
 		//TODO: Better naming convention for loadBalancer pool members
 		//NOTE: For now we will use member-10133720-nodePort since dots are not supported.
 		//TODO: Implement Validation for API Error 14571 (valid member name should contain letters, digits, dash, underscore and must start with a letter)
-		Name: fmt.Sprintf("member-%s-%d", strings.ReplaceAll(nodeIp.String(), ".", ""), port.NodePort),
+		Name:        fmt.Sprintf("member-%s-%d", strings.ReplaceAll(nodeIp.String(), ".", ""), port.NodePort),
 		IpAddress:   nodeIp.String(),
 		Weight:      1,
 		MonitorPort: int(port.Port),

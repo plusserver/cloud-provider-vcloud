@@ -43,18 +43,18 @@ type IpAddressAllocation struct {
 }
 
 type FirewallConfig struct {
-	name string
+	name        string
 	Source      types.EdgeFirewallEndpoint
 	Destination types.EdgeFirewallEndpoint
 	Application types.EdgeFirewallApplication
 }
 
 type Config struct {
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	Org      string `yaml:"org"`
-	Href     string `yaml:"href"`
-	VDC      string `yaml:"vdc"`
-	Insecure bool `yaml:"insecure"`
+	User        string `yaml:"user"`
+	Password    string `yaml:"password"`
+	Org         string `yaml:"org"`
+	Href        string `yaml:"href"`
+	VDC         string `yaml:"vdc"`
+	Insecure    bool   `yaml:"insecure"`
 	EdgeGateway string `yaml:"edgeGateway"`
 }
