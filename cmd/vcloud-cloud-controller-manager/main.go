@@ -3,7 +3,7 @@ package main
 import (
 	goflag "flag"
 	"fmt"
-	"github.com/propero-oss/cloud-provider-vcloud/pkg/cloudproviders/providers/vcloud"
+	"github.com/plusserver/cloud-provider-vcloud/pkg/vcloud"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"k8s.io/apimachinery/pkg/util/sets"

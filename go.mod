@@ -1,4 +1,4 @@
-module github.com/propero-oss/cloud-provider-vcloud
+module github.com/plusserver/cloud-provider-vcloud
 
 go 1.14
 
